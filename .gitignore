@@ -1,0 +1,5 @@
+# editor backups
+*~
+# input files
+*.dfg
+*.json
