@@ -3,3 +3,5 @@
 # input files
 *.dfg
 *.json
+# working notes
+notes.org
