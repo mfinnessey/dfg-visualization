@@ -1,6 +1,6 @@
 #!/bin/python3
 
-def create_graph_png(json_filepath):
+def create_graph_images(json_filepath):
     with open(json_filepath, 'r') as f:
         raw = ''.join(f.readlines())
         parsed = eval(raw.replace('null', 'None').replace('true', 'True').replace('false', 'False'))
@@ -13,4 +13,4 @@ def create_graph_png(json_filepath):
 if __name__ == "__main__":
     import sys
     for i in range(1, len(sys.argv)):
-        create_graph_png(sys.argv[i])
+        create_graph_images(sys.argv[i])
