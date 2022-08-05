@@ -50,9 +50,19 @@ def create_graph_images(json_filepath):
     for node in subgraph:
         if node['inputs'] != None:
             for input in node['inputs']:
-                tail_identifier = str(input['edges'][0]['src_id']) + ':f' + str(input['edges'][0]['src_val'])
-                head_identifier = str(node['id']) + ':f' + str(input['edges'][0]['oid'])
-                g.edge(tail_identifier, head_identifier)
+
+                src_id = str(input['edges'][0]['src_id'])
+                src_port = str(input['edges'][0]['src_val'])
+                dest_id = str(node['id'])
+                dest_port = str(input['edges'][0]['oid'])
+
+                # prevent assignment to a port that graphically doesn't exist on the destination node
+                if 'lanes' not in node.keys():
+                    dest_port = '0'
+
+                src_identifier = src_id + ':f' + src_port
+                dest_identifier =  dest_id + ':f' + dest_port
+                g.edge(src_identifier, dest_identifier)
 
     # render graph
     g.view()
