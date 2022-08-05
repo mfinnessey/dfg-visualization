@@ -17,8 +17,9 @@ def generate_node_string(node):
         middle = lanes / 2 - 1
 
         # add lanes
+        node_string += ' 0'
         for i in range(1, lanes):
-            node_string += ' | <f'+ str(i) + '> '
+            node_string += ' | <f'+ str(i) + '> ' + str(i)
             # add in blank port with node name on it
             if i == middle:
                 node_string += ' | ' + node_name + ' '
