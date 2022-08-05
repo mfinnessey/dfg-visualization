@@ -13,16 +13,15 @@ def generate_node_string(node):
     if lanes == 1:
         node_string += node_name
     else:
-        # determine rough middle location to place node name
-        middle = lanes / 2
-        if lanes % 2 == 1:
-            middle += 1
+        # determine rough middle location to place node name after
+        middle = lanes / 2 - 1
 
         # add lanes
         for i in range(1, lanes):
             node_string += ' | <f'+ str(i) + '> '
+            # add in blank port with node name on it
             if i == middle:
-                node_string += node_name
+                node_string += ' | ' + node_name + ' '
 
     return node_string
 
