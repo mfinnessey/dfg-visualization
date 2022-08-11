@@ -28,6 +28,9 @@ def generate_node_string(node):
 
 
 def create_graph_images(json_filepath):
+    # get name of file to name dfg files
+    import os
+    file_name = os.path.basename(os.path.normpath(json_filepath)).removesuffix('.json')
     # parse JSON
     with open(json_filepath, 'r') as f:
         raw = ''.join(f.readlines())
@@ -41,7 +44,7 @@ def create_graph_images(json_filepath):
         # draw subgraph using graphviz
         import graphviz
         from graphviz import nohtml
-        graph_name = "dfg-" + str(group)
+        graph_name = file_name + "_" + str(group)
         g = graphviz.Digraph('g', filename=graph_name, node_attr={'shape': 'record', 'height': '.1'})
 
 
