@@ -33,7 +33,6 @@ def create_graph_images(json_filepath):
         raw = ''.join(f.readlines())
     parsed = eval(raw.replace('null', 'None').replace('true', 'True').replace('false', 'False'))
     group = 0 # FIXME currently hardcoded to only generate an image for the first subgraph
-    roots = []
     subgraph = [node for node in parsed if node['group'] == group]
 
     # draw subgraph using graphviz
