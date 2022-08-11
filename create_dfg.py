@@ -32,39 +32,43 @@ def create_graph_images(json_filepath):
     with open(json_filepath, 'r') as f:
         raw = ''.join(f.readlines())
     parsed = eval(raw.replace('null', 'None').replace('true', 'True').replace('false', 'False'))
-    group = 0 # FIXME currently hardcoded to only generate an image for the first subgraph
-    subgraph = [node for node in parsed if node['group'] == group]
+    groups = set()
+    for element in parsed:
+        groups.add(element['group'])
+    for group in groups:
+        subgraph = [node for node in parsed if node['group'] == group]
 
-    # draw subgraph using graphviz
-    import graphviz
-    from graphviz import nohtml
-    g = graphviz.Digraph('g', filename="dfg.gv", node_attr={'shape': 'record', 'height': '.1'})
+        # draw subgraph using graphviz
+        import graphviz
+        from graphviz import nohtml
+        graph_name = "dfg-" + str(group)
+        g = graphviz.Digraph('g', filename=graph_name, node_attr={'shape': 'record', 'height': '.1'})
 
 
-    # add nodes (including ports)
-    for node in subgraph:
-        g.node(str(node['id']), nohtml(generate_node_string(node)))
+        # add nodes (including ports)
+        for node in subgraph:
+            g.node(str(node['id']), nohtml(generate_node_string(node)))
 
-    # go back and add edges now that nodes and ports are defined
-    for node in subgraph:
-        if node['inputs'] != None:
-            for input in node['inputs']:
+        # go back and add edges now that nodes and ports are defined
+        for node in subgraph:
+            if node['inputs'] != None:
+                for input in node['inputs']:
 
-                src_id = str(input['edges'][0]['src_id'])
-                src_port = str(input['edges'][0]['src_val'])
-                dest_id = str(node['id'])
-                dest_port = str(input['edges'][0]['oid'])
+                    src_id = str(input['edges'][0]['src_id'])
+                    src_port = str(input['edges'][0]['src_val'])
+                    dest_id = str(node['id'])
+                    dest_port = str(input['edges'][0]['oid'])
 
-                # prevent assignment to a port that graphically doesn't exist on the destination node
-                if 'lanes' not in node.keys():
-                    dest_port = '0'
+                    # prevent assignment to a port that graphically doesn't exist on the destination node
+                    if 'lanes' not in node.keys():
+                        dest_port = '0'
 
-                src_identifier = src_id + ':f' + src_port
-                dest_identifier =  dest_id + ':f' + dest_port
-                g.edge(src_identifier, dest_identifier)
+                    src_identifier = src_id + ':f' + src_port
+                    dest_identifier =  dest_id + ':f' + dest_port
+                    g.edge(src_identifier, dest_identifier)
 
-    # render graph
-    g.view()
+        # render graph
+        g.view()
 
 
 if __name__ == "__main__":
